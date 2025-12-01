@@ -1,6 +1,7 @@
 # Unity Care Clinic - Système de Gestion Hospitalière
 
-![Database Schema]([https://img.shields.io/badge/Database-SQL-blue]((https://dbdiagram.io/d/692dba3bd6676488ba1b9e7d))
+# Shema de Table :
+https://dbdiagram.io/d/692dba3bd6676488ba1b9e7d
 
 
 ## 📋 Aperçu du Projet
