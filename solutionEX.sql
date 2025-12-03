@@ -113,4 +113,40 @@ SELECT gender , COUNT(patient_id) FROM patients GROUP BY gender
 SELECT gender , COUNT(patient_id) AS patient_count FROM patients  GROUP BY gender HAVING COUNT(patient_id)<2
 
 -- EXERCICE 20 :une vue listant toutes les admissions en cours.
+
 CREATE VIEW admissions_encours AS SELECT * from admissions WHERE discharge_date IS null
+
+
+
+
+-- BONUS 1
+SELECT 
+    p.first_name AS patient_first,
+    p.last_name AS patient_last,
+    d.first_name AS doctor_first,
+    d.last_name AS doctor_last,
+    d.specialization
+FROM patients p
+JOIN admissions a ON p.patient_id = a.patient_id
+JOIN prescriptions pr ON p.patient_id = pr.patient_id
+JOIN doctors d ON pr.doctor_id = d.doctor_id
+GROUP BY p.patient_id, d.doctor_id;
+
+-- BONUS 2
+SELECT 
+    dept.department_name,
+    a.reason as reasonRdv
+FROM appointments a
+JOIN departments dept ON a.appointment_id = dept.department_id
+
+
+-- BONUS 3
+SELECT 
+    d.last_name AS docteur,
+    m.medication_name
+FROM prescriptions pr
+JOIN doctors d ON pr.doctor_id = d.doctor_id
+JOIN medications m ON pr.medication_id = m.medication_id
+
+
+
