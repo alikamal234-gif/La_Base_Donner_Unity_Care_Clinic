@@ -64,7 +64,7 @@ FROM patients;
 select count(*) as NomberRendezVous FROM appointments
 
 -- EXERCICE 10 : Comptez le nombre de médecins dans chaque département
-select department_id, COUNT(department_id) AS number
+select department_id, COUNT(department_id) AS EGG
 from doctors
 GROUP BY
     department_id
@@ -84,7 +84,7 @@ SELECT MAX(appointment_date) as maxRendezVous FROM appointments
 SELECT room_id, SUM(1) AS total_admissions
 FROM admissions
 GROUP BY
-    room_id
+    room_id20
 
 -- EXERCICE 14 : tous les patients dont le champ email est vide
 SELECT * FROM patients WHERE email IS NULL
@@ -113,40 +113,43 @@ SELECT gender , COUNT(patient_id) FROM patients GROUP BY gender
 SELECT gender , COUNT(patient_id) AS patient_count FROM patients  GROUP BY gender HAVING COUNT(patient_id)<2
 
 -- EXERCICE 20 :une vue listant toutes les admissions en cours.
-
 CREATE VIEW admissions_encours AS SELECT * from admissions WHERE discharge_date IS null
 
 
-
-
 -- BONUS 1
-SELECT 
-    p.first_name AS patient_first,
-    p.last_name AS patient_last,
-    d.first_name AS doctor_first,
-    d.last_name AS doctor_last,
-    d.specialization
-FROM patients p
-JOIN admissions a ON p.patient_id = a.patient_id
-JOIN prescriptions pr ON p.patient_id = pr.patient_id
-JOIN doctors d ON pr.doctor_id = d.doctor_id
-GROUP BY p.patient_id, d.doctor_id;
+select p.first_name , d.first_name 
+from patients p 
+JOIN prescriptions pa 
+ON p.patient_id = pa.patient_id 
+JOIN doctors d 
+ON pa.doctor_id = d.doctor_id
 
 -- BONUS 2
-SELECT 
-    dept.department_name,
-    a.reason as reasonRdv
-FROM appointments a
-JOIN departments dept ON a.appointment_id = dept.department_id
-
+SELECT a.appointment_date,
+a.reason as title,
+dr.first_name,
+dr.specialization,
+d.department_name 
+FROM appointments as a
+INNER JOIN doctors as dr 
+ON a.docter_id=dr.docter_id
+INNER JOIN departments as d
+ON d.department_id=d.department_id
 
 -- BONUS 3
-SELECT 
-    d.last_name AS docteur,
-    m.medication_name
-FROM prescriptions pr
-JOIN doctors d ON pr.doctor_id = d.doctor_id
-JOIN medications m ON pr.medication_id = m.medication_id
+SELECT m.medication_name , d.first_name 
+from medications m 
+JOIN prescriptions p on p.medication_id = m.medication_id 
+join doctors d on d.doctor_id = p.doctor_id
 
+-- BONUS 4 
+select a.* , r.* from admissions a join rooms r on r.room_id = a.room_id where r.availability = 1
 
-
+-- BONUS 5
+select de.department_name , COUNT(*)
+FROM departments de
+JOIN doctors doc ON doc.department_id = de.department_id
+JOIN prescriptions pre ON pre.doctor_id = doc.doctor_id
+JOIN patients pat ON pat.patient_id = pre.patient_id
+JOIN admissions adm ON adm.patient_id = pat.patient_id
+GROUP BY doc.department_id
